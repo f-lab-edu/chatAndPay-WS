@@ -1,1 +1,1 @@
-rootProject.name = "ws"
+rootProject.name = "chatAndPay"
