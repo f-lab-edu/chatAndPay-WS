@@ -19,8 +19,9 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+	implementation("org.springframework.boot:spring-boot-starter-websocket")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+//	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -28,7 +29,14 @@ dependencies {
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("com.mysql:mysql-connector-j")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.security:spring-security-test")
+//	testImplementation("org.springframework.security:spring-security-test")
+
+	implementation("org.springframework.boot:spring-boot-starter-freemarker")
+	implementation("org.webjars.bower:bootstrap:4.3.1")
+	implementation("org.webjars.bower:vue:2.5.16")
+	implementation("org.webjars.bower:axios:0.17.1")
+	implementation("org.webjars:sockjs-client:1.1.2")
+	implementation("org.webjars:stomp-websocket:2.3.3-1")
 }
 
 jib {
@@ -37,10 +45,10 @@ jib {
 	}
 	to {
 		image = "ankyeongeun/chat-and-pay"
-		auth {
-			username = (project.property("USERNAME")) as String // Defined in 'gradle.properties'.
-			password = (project.property("PASSWORD")) as String
-		}
+//		auth {
+//			username = (project.property("USERNAME")) as String // Defined in 'gradle.properties'.
+//			password = (project.property("PASSWORD")) as String
+//		}
 	}
 	container {
 		jvmFlags = listOf("-Xms512m", "-Xmx512m")
