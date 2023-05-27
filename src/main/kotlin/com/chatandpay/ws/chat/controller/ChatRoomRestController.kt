@@ -1,12 +1,13 @@
 package com.chatandpay.ws.chat.controller
 
+import com.chatandpay.ws.chat.entity.ChatRoom
 import org.springframework.http.MediaType
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.web.bind.annotation.*
-import com.chatandpay.ws.chat.entity.ChatRoom
 import com.chatandpay.ws.chat.service.ChatRoomService
+import java.util.UUID
 
 
 @RestController
@@ -21,6 +22,7 @@ class ChatRoomRestController(
     @MessageMapping("/pub/chat/room/{roomId}")
     @SendTo("/sub/chat/room/{roomId}")
     fun message(@DestinationVariable roomId: String, dto: ChatDto): ChatDto {
+        println(roomId);
         return dto
     }
 
@@ -29,19 +31,17 @@ class ChatRoomRestController(
         value = ["/api/v1/chat/room"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun createRoom(@RequestParam name: String): ChatRoomDto {
-        return chatRoomService.createRoom(name).toDto()
+    fun createRoom(@RequestParam name: String): ChatRoom {
+        return chatRoomService.createRoom(name);
     }
 
-    // 채팅방 전체 조회
+     //채팅방 전체 조회
     @GetMapping(
         value = ["/api/v1/chat/room"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun findAllRoom(): List<ChatRoomDto> {
-        return chatRoomService.findAllRoom().map {
-            it.toDto()
-        }
+    fun findAllRoom(): List<ChatRoom> {
+        return chatRoomService.findAllRoom();
     }
 
     /**
@@ -52,8 +52,8 @@ class ChatRoomRestController(
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun roomInfo(
-        @PathVariable roomId: String
-    ): ChatRoom {
+        @PathVariable roomId: UUID
+    ): ChatRoom? {
         return chatRoomService.findById(roomId)
     }
 }
