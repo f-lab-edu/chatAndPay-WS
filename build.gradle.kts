@@ -41,6 +41,9 @@ dependencies {
 
 	implementation("com.fasterxml.uuid:java-uuid-generator:3.2.0")
 
+	implementation("org.springframework.boot:spring-boot-devtools:2.6.3")
+
+
 }
 
 jib {
