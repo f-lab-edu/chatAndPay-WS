@@ -30,7 +30,7 @@
     </div>
     <ul class="list-group">
         <li class="list-group-item" v-for="message in messages">
-            {{message.sender}} - {{message.message}} - {{new Date(message.createdAt)}}</a>
+            {{message.senderName}} - {{message.message}} - {{new Date(message.createdAt)}}</a>
         </li>
     </ul>
     <div></div>
@@ -52,13 +52,13 @@
         data: {
             roomId: '',
             room: {},
-            sender: '',
+            senderName: '',
             message: '',
             messages: []
         },
         created() {
             this.roomId = localStorage.getItem('wschat.roomId');
-            this.sender = localStorage.getItem('wschat.sender');
+            this.senderName = localStorage.getItem('wschat.sender');
             this.findRoom();
         },
         methods: {
@@ -70,20 +70,20 @@
             sendMessage: function () {
                 ws.send("/pub/chat/room/" + this.roomId, {}, JSON.stringify({
                     type: 'COMMENT',
-                    sender: this.sender,
+                    senderName: this.senderName,
                     message: this.message
                 }));
                 this.message = '';
             },
             recvMessage: function (recv) {
-                if (recv.type === 'COMMENT') {
+                //if (recv.type === 'COMMENT') {
                     this.messages.unshift({
                         "type": recv.type,
-                        "sender": recv.sender,
+                        "senderName": recv.senderName,
                         "message": recv.message,
                         "createdAt": recv.createdAt
                     })
-                }
+                //}
             }
         }
     });
@@ -93,11 +93,12 @@
         ws.connect({}, function (frame) {
             ws.subscribe("/sub/chat/room/" + vm.$data.roomId, function (message) {
                 var recv = JSON.parse(message.body);
+                console.log(recv);
                 vm.recvMessage(recv);
             });
             ws.send("/pub/chat/room/" + vm.$data.roomId, {}, JSON.stringify({
                 type: 'ENTER',
-                sender: vm.$data.sender,
+                senderName: vm.$data.senderName,
                 message: ''
             }));
         }, function (error) {
