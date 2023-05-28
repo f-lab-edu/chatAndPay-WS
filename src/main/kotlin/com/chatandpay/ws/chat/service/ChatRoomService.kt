@@ -16,7 +16,10 @@ class ChatRoomService(
     class ChatRoomCreationException(message: String, cause: Throwable) : RuntimeException(message, cause)
 
     fun findAllRoom(): List<ChatRoom> {
-        return chatRoomRepository.findAll();
+        val re = chatRoomRepository.findAll();
+        println(re);
+        return re;
+
     }
     fun findById(id: UUID): ChatRoom? {
         val optionalChatRoom: Optional<ChatRoom> = chatRoomRepository.findById(id)
@@ -28,8 +31,7 @@ class ChatRoomService(
         try {
             val chatRoom = ChatRoom(name)
             return chatRoomRepository.save(chatRoom)
-        } catch (e: Exception) {       e.printStackTrace()
-            // 적절한 예외 처리를 수행하거나 예외를 던지는 것이 좋습니다.
+        } catch (e: Exception) { e.printStackTrace()
             throw ChatRoomCreationException("Failed to create chat room", e)
         }
     }

@@ -1,6 +1,8 @@
 package com.chatandpay.ws.chat.controller
 
+import com.chatandpay.ws.chat.entity.ChatMessage
 import com.chatandpay.ws.chat.entity.ChatRoom
+import com.chatandpay.ws.chat.service.ChatMessageService
 import org.springframework.http.MediaType
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -12,7 +14,8 @@ import java.util.UUID
 
 @RestController
 class ChatRoomRestController(
-    private val chatRoomService: ChatRoomService
+    private val chatRoomService: ChatRoomService,
+    private val chatMessageService: ChatMessageService
 ) {
 
     /**
@@ -21,10 +24,25 @@ class ChatRoomRestController(
      */
     @MessageMapping("/pub/chat/room/{roomId}")
     @SendTo("/sub/chat/room/{roomId}")
-    fun message(@DestinationVariable roomId: String, dto: ChatDto): ChatDto {
-        println(roomId);
-        return dto
+    fun message(@DestinationVariable roomId: String, chatMessageDto: ChatMessageDto): Any? {
+
+        // 사용자가 접속할때마다 채팅 내역을 보여준다
+        if(chatMessageDto.type == ChatMessageDto.Type.ENTER){
+            println("접속");
+//            return chatMessageService.getChatMessagesBySenderId(chatMessageDto);
+            val fakeChatMessageDto = ChatMessageDto(
+                type = ChatMessageDto.Type.ENTER,
+                senderName = "John",
+                recieverName = "Alice",
+                message = "입장했습니다."
+            )
+            return fakeChatMessageDto
+        }
+        // 🔴 메시지 저장 - 보통 이부분은 비동기적으로 처리되지 않을까? 유저가 입력한 메시지를 보여주는게 우선이고 저장이 후순위일 것 같다.
+        chatMessageService.saveMessage(chatMessageDto);
+        return chatMessageDto;
     }
+
 
     //체팅방 생성
     @PostMapping(
