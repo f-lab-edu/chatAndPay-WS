@@ -1,20 +1,23 @@
 package com.chatandpay.ws.chat.entity
 
+import com.chatandpay.ws.utils.toEpochMillis
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
-import java.util.UUID
+import java.time.LocalDateTime
+import java.util.*
 
 
-@Document(collection = "chatMessage")
-data class ChatMessage(
-    val message: String,
+@Document(collection = "groupMessage")
+data class ChatGroupMessage(
+    @Field("group_id")
+    val groupId: UUID,
     @Field("sender_id")
     val senderId: UUID,
-    @Field("receiver_id")
-    val receiverId: UUID,
-    val createdAt: Long
+    val message: String,
+
 ) {
+    val createdAt: Long = LocalDateTime.now().toEpochMillis()
     @Id
     var id: UUID = UUID.randomUUID()
 }
