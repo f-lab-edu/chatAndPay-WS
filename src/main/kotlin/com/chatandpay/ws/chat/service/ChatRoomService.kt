@@ -35,4 +35,13 @@ class ChatRoomService(
             throw ChatRoomCreationException("Failed to create chat room", e)
         }
     }
+
+    fun createGroup(name: String): ChatRoom {
+        try {
+            val chatRoom = ChatRoom(name)
+            return chatRoomRepository.save(chatRoom)
+        } catch (e: Exception) { e.printStackTrace()
+            throw ChatRoomCreationException("Failed to create chat room", e)
+        }
+    }
 }

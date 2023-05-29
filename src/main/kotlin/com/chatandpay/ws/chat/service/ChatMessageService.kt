@@ -1,8 +1,10 @@
 package com.chatandpay.ws.chat.service
 
-import com.chatandpay.ws.chat.controller.ChatMessageDto
-import com.chatandpay.ws.chat.controller.EnterMessageDto
+import com.chatandpay.ws.chat.dtos.ChatMessageDto
+import com.chatandpay.ws.chat.entity.ChatGroupMessage
 import com.chatandpay.ws.chat.entity.ChatMessage
+import com.chatandpay.ws.chat.entity.ChatRoom
+import com.chatandpay.ws.chat.repository.ChatGroupMessageRepository
 import com.chatandpay.ws.chat.repository.ChatMessageRepository
 import org.springframework.stereotype.Service
 import java.util.*
@@ -10,15 +12,17 @@ import java.util.*
 @Service
 class ChatMessageService (
     private val chatMessageRepository: ChatMessageRepository
+    private val chatGroupMessageRepository:ChatGroupMessageRepository
     ){
 
     fun saveMessage(chatMessageDto: ChatMessageDto): Unit {
         println(chatMessageDto);
         if(chatMessageDto.type == ChatMessageDto.Type.COMMENT){
             val chatMessage = ChatMessage(
+
                 message = chatMessageDto.message,
                 senderId = chatMessageDto.senderId,
-                recieverId = chatMessageDto.recieverId,
+                receiverId = chatMessageDto.recieverId,
                 createdAt = chatMessageDto.createdAt
             )
             chatMessageRepository.save(chatMessage);
@@ -51,6 +55,16 @@ class ChatMessageService (
             )
         );
 
+    }
+
+    // 그룹챗 저장
+    fun createGroupMessage(name: String) {
+//        try {
+//            val chatRoom = ChatGroupMessage();
+//            return chatGroupMessageRepository.save()
+//        } catch (e: Exception) { e.printStackTrace()
+//            throw ChatRoomService.ChatRoomCreationException("Failed to create chat room", e)
+//        }
     }
 
 }

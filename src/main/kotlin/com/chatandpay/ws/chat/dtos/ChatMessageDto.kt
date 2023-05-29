@@ -1,14 +1,9 @@
-package com.chatandpay.ws.chat.controller
+package com.chatandpay.ws.chat.dtos
 
-import com.chatandpay.ws.chat.entity.ChatRoom
 import com.chatandpay.ws.utils.toEpochMillis
-import org.springframework.data.annotation.Id
 import java.time.LocalDateTime
 import java.util.UUID
 
-data class ChatRoomDto(
-    val id: UUID
-)
 
 data class ChatMessageDto(
     val type: Type,
@@ -17,7 +12,7 @@ data class ChatMessageDto(
     val recieverId: UUID = UUID.randomUUID(),
     val recieverName: String?, // 애도 비어있으면 안되지만 일단은..
     val message: String,
-    val createdAt: Long = LocalDateTime.now().toEpochMillis()
+    val createdAt: Long
 ) {
     enum class Type {
         ENTER, COMMENT
@@ -32,7 +27,5 @@ data class EnterMessageDto(
 )
 
 
-internal fun ChatRoom.toDto() = ChatRoomDto(
-    id = id
-)
+
 
