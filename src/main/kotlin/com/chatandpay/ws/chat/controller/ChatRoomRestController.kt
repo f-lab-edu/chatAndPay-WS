@@ -24,23 +24,16 @@ class ChatRoomRestController(
      */
     @MessageMapping("/pub/chat/room/{roomId}")
     @SendTo("/sub/chat/room/{roomId}")
-    fun message(@DestinationVariable roomId: String, chatMessageDto: ChatMessageDto): Any? {
+    fun message(@DestinationVariable roomId: String, chatMessageDto: ChatMessageDto): List<ChatMessageDto> {
 
         // 사용자가 접속할때마다 채팅 내역을 보여준다
-        if(chatMessageDto.type == ChatMessageDto.Type.ENTER){
+        if(chatMessageDto.type == ChatMessageDto.Type.ENTER) {
             println("접속");
-//            return chatMessageService.getChatMessagesBySenderId(chatMessageDto);
-            val fakeChatMessageDto = ChatMessageDto(
-                type = ChatMessageDto.Type.ENTER,
-                senderName = "John",
-                recieverName = "Alice",
-                message = "입장했습니다."
-            )
-            return fakeChatMessageDto
+            return chatMessageService.getChatMessagesBySenderId(chatMessageDto);
         }
         // 🔴 메시지 저장 - 보통 이부분은 비동기적으로 처리되지 않을까? 유저가 입력한 메시지를 보여주는게 우선이고 저장이 후순위일 것 같다.
         chatMessageService.saveMessage(chatMessageDto);
-        return chatMessageDto;
+        return listOf(chatMessageDto);
     }
 
 

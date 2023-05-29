@@ -75,14 +75,18 @@
                 }));
                 this.message = '';
             },
-            recvMessage: function (recv) {
+            recvMessage: function (recvList) {
                 //if (recv.type === 'COMMENT') {
+                recvList.map(recv => {
+
                     this.messages.unshift({
                         "type": recv.type,
                         "senderName": recv.senderName,
                         "message": recv.message,
                         "createdAt": recv.createdAt
                     })
+
+                })
                 //}
             }
         }
