@@ -25,6 +25,13 @@ data class ChatMessageDto(
 }
 
 
+data class EnterMessageDto(
+    val senderName:String,
+    val recieverName:String,
+    val message:String="입장했습니다"
+)
+
+
 internal fun ChatRoom.toDto() = ChatRoomDto(
     id = id
 )
