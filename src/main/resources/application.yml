@@ -1,0 +1,16 @@
+spring:
+  jib:
+    from:
+      auth:
+        username: ankyeongeun
+        password: wkehd4218*
+    container:
+      jvmFlags: -Xms512m, -Xmx512m
+  freemarker:
+    cache: false
+    template-loader-path: classpath:/templates
+    suffix: .ftlh
+  data:
+    mongodb:
+      uri: mongodb+srv://anruddms8124:chatandpay123@chat.cia7tgc.mongodb.net/?retryWrites=true&w=majority
+      uuid-representation: standard

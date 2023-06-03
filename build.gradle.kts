@@ -21,7 +21,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -31,12 +31,19 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 //	testImplementation("org.springframework.security:spring-security-test")
 
+
 	implementation("org.springframework.boot:spring-boot-starter-freemarker")
 	implementation("org.webjars.bower:bootstrap:4.3.1")
 	implementation("org.webjars.bower:vue:2.5.16")
 	implementation("org.webjars.bower:axios:0.17.1")
 	implementation("org.webjars:sockjs-client:1.1.2")
 	implementation("org.webjars:stomp-websocket:2.3.3-1")
+
+	implementation("com.fasterxml.uuid:java-uuid-generator:3.2.0")
+
+	implementation("org.springframework.boot:spring-boot-devtools:2.6.3")
+
+
 }
 
 jib {
