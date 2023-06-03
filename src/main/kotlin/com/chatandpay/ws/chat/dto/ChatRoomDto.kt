@@ -1,4 +1,4 @@
-package com.chatandpay.ws.chat.dtos
+package com.chatandpay.ws.chat.dto
 
 import com.chatandpay.ws.chat.entity.ChatRoom
 import java.util.*

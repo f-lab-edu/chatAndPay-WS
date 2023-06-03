@@ -1,10 +1,17 @@
 package com.chatandpay.ws.chat.controller
 
-import com.chatandpay.ws.chat.dtos.ChatMessageDto
+import com.chatandpay.ws.chat.dto.ChatMessageDto
+import com.chatandpay.ws.chat.dto.GroupChatMesageDto
+import com.chatandpay.ws.chat.entity.GroupChatMessage
+import com.chatandpay.ws.chat.entity.GroupUser
 import com.chatandpay.ws.chat.service.ChatMessageService
+import org.bson.types.ObjectId
+import org.springframework.http.MediaType
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.SendTo
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 
@@ -20,7 +27,7 @@ class ChatMessageRestController(
      */
     @MessageMapping("/pub/chat/room/{roomId}")
     @SendTo("/sub/chat/room/{roomId}")
-    fun message(@DestinationVariable roomId: String, chatMessageDto: ChatMessageDto): List<ChatMessageDto> {
+    fun message(@DestinationVariable roomId: String,  chatMessageDto: ChatMessageDto): List<ChatMessageDto> {
 
         // 사용자가 접속할때마다 채팅 내역을 보여준다
         if(chatMessageDto.type == ChatMessageDto.Type.ENTER) {
@@ -30,6 +37,14 @@ class ChatMessageRestController(
         // 🔴 메시지 저장 - 보통 이부분은 비동기적으로 처리되지 않을까? 유저가 입력한 메시지를 보여주는게 우선이고 저장이 후순위일 것 같다.
         chatMessageService.saveMessage(chatMessageDto);
         return listOf(chatMessageDto);
+    }
+
+
+    // 그룹 메시지
+    @MessageMapping("/pub/chat/group/{groupId}")
+    @SendTo("/sub/chat/group/{groupId}")
+    fun groupMessage(@DestinationVariable groupId: ObjectId, groupChatMessage:GroupChatMesageDto): GroupChatMessage {
+        return chatMessageService.createGroupMessage(groupId,groupChatMessage);
     }
 
 }

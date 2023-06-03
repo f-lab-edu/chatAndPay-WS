@@ -11,6 +11,9 @@ data class ChatRoom(
 ) {
     @Id
     var id: UUID = UUID.randomUUID()
+    enum class Type {
+        GROUP, ONE_TO_ONE
+    }
 
 }
 
