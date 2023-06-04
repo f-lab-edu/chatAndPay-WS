@@ -100,6 +100,14 @@
                 console.log(recv);
                 vm.recvMessage(recv);
             });
+
+            ws.subscribe("/sub/chat/room/type/group/" + vm.$data.roomId, function (message) {
+                var recv = JSON.parse(message.body);
+                console.log(recv);
+            // 처리 로직 추가
+            });
+
+
             ws.send("/pub/chat/room/" + vm.$data.roomId, {}, JSON.stringify({
                 type: 'ENTER',
                 senderName: vm.$data.senderName,

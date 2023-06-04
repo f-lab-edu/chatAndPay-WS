@@ -1,5 +1,7 @@
 package com.chatandpay.ws.chat.controller
 
+import com.chatandpay.ws.chat.dto.CreateGroupRoomRequestDto
+import com.chatandpay.ws.chat.dto.CreateRoomRequest
 import com.chatandpay.ws.chat.entity.ChatRoom
 import com.chatandpay.ws.chat.entity.GroupUser
 import com.chatandpay.ws.chat.service.ChatGroupService
@@ -16,23 +18,24 @@ class ChatRoomRestController(
     private val chatGroupService: ChatGroupService
 ) {
 
-    //체팅방 생성 - 채팅방의 타입
+    // 체팅방 생성 - 채팅방의 타입 구분
     @PostMapping(
         value = ["/api/v1/chat/room"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun createRoom(@RequestParam name: String): ChatRoom {
-        return chatRoomService.createRoom(name);
+    fun createRoom(@RequestBody chatRoomDto: CreateRoomRequest): ChatRoom {
+        return chatRoomService.createRoom(chatRoomDto);
     }
 
 
-    // 그룹 생성
+    // 그룹 채팅방 생성
     @PostMapping(
-        value = ["/api/v1/chat/group"],
+        value = ["/api/v1/chat/room/type/group"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun createGroupRoom(@RequestParam members : List<ObjectId>): List<GroupUser> {
-        return chatGroupService.createGroupMember(members);
+    fun createGroupRoom(@RequestBody groupChatRoomDto: CreateGroupRoomRequestDto): ChatRoom {
+        println(groupChatRoomDto);
+        return chatRoomService.createGroupMember(groupChatRoomDto);
     }
 
 

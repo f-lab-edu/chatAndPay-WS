@@ -11,7 +11,4 @@ data class GroupUser (
     val groupId: ObjectId,
     val userId: ObjectId,
 ){
-//    @Id
-//    val id: ObjectId = ObjectId()
-
 }
