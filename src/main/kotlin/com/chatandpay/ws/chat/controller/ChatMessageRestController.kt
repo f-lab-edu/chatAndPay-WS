@@ -41,7 +41,7 @@ class ChatMessageRestController(
 
 
     // 그룹 메시지
-    @MessageMapping("/pub/chat/group/{groupId}")
+    @MessageMapping("/pub/chat/room/{roomId}/type/group")
     @SendTo("/sub/chat/group/{groupId}")
     fun groupMessage(@DestinationVariable groupId: ObjectId, groupChatMessage:GroupChatMesageDto): GroupChatMessage {
         return chatMessageService.createGroupMessage(groupId,groupChatMessage);

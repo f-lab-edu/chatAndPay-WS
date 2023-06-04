@@ -11,14 +11,14 @@ import java.util.*
 
 @Document(collection = "groupMessage")
 data class GroupChatMessage(
+    @Id
+    val id: ObjectId = ObjectId(),
     @Field("group_id")
     val groupId: ObjectId,
     @Field("sender_id")
     val senderId: ObjectId,
-    val message: String,
+    val message: String
 
 ) {
     val createdAt: Long = LocalDateTime.now().toEpochMillis()
-    @Id
-    var id: ObjectId = ObjectId()
 }

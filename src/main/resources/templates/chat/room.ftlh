@@ -19,6 +19,17 @@
             <h3>채팅방 리스트</h3>
         </div>
     </div>
+    <div>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <label class="input-group-text">채팅 유형</label>
+            </div>
+            <select class="form-control" v-model="room_type">
+                <option value="">선택하세요</option>
+                <option value="GROUP">그룹 채팅</option>
+                <option value="ONE_TO_ONE">일반 채팅</option>
+            </select>
+        </div>
     <div class="input-group">
         <div class="input-group-prepend">
             <label class="input-group-text">방제목</label>
@@ -45,6 +56,7 @@
         el: '#app',
         data: {
             room_name: '',
+            room_type: '',
             chatrooms: []
         },
         created() {
@@ -58,13 +70,28 @@
                 });
             },
             createRoom: function () {
-                if ("" === this.room_name) {
-                    alert("방 제목을 입력해 주십시요.");
+                  if (this.room_type === '') {
+                    alert("채팅 유형을 선택해 주세요.");
                     return;
-                } else {
-                    var params = new URLSearchParams();
-                    params.append("name", this.room_name);
-                    axios.post('/api/v1/chat/room', params)
+                  } else if (this.room_name === '') {
+                    alert("방 제목을 입력해 주세요.");
+                    return;
+                  }else {
+
+                    const data = {
+                        name: this.room_name,
+                        type: this.room_type
+                    };
+
+                    let url = '/api/v1/chat/room';
+
+                    if (this.room_type === 'GROUP') {
+                      url = '/api/v1/chat/room/type/group'; // GROUP일 경우 다른 API 호출
+                      let members = ['647c33f22d1fc974ebf36c8a', '647c33f22d1fc974ebf36c8b', '647c33f22d1fc974ebf36c8c']; // ObjectId 리스트를 생성
+                      data.members = members;
+                    }
+
+                    axios.post(url, data)
                         .then(
                             response => {
                                 alert(response.data.name + "방 개설에 성공하였습니다.")
