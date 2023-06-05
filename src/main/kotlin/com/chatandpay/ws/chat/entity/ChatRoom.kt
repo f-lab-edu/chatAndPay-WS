@@ -1,5 +1,6 @@
 package com.chatandpay.ws.chat.entity
 
+import com.chatandpay.ws.chat.dto.ChatRoomDto
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,6 +19,14 @@ data class ChatRoom(
     }
 
 }
+
+// ChatRoom 확장 함수
+fun ChatRoom.toDto() = ChatRoomDto(
+    id = this.id.toString(),
+    name = this.name,
+    type = this.type
+)
+
 
 
 //data class ChatRoom(

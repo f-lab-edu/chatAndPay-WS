@@ -1,5 +1,6 @@
 package com.chatandpay.ws.chat.controller
 
+import com.chatandpay.ws.chat.dto.ChatRoomDto
 import com.chatandpay.ws.chat.dto.CreateGroupRoomRequestDto
 import com.chatandpay.ws.chat.dto.CreateRoomRequest
 import com.chatandpay.ws.chat.entity.ChatRoom
@@ -33,7 +34,7 @@ class ChatRoomRestController(
         value = ["/api/v1/chat/room/type/group"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun createGroupRoom(@RequestBody groupChatRoomDto: CreateGroupRoomRequestDto): ChatRoom {
+    fun createGroupRoom(@RequestBody groupChatRoomDto: CreateGroupRoomRequestDto): ChatRoomDto {
         println(groupChatRoomDto);
         return chatRoomService.createGroupMember(groupChatRoomDto);
     }
@@ -44,7 +45,7 @@ class ChatRoomRestController(
         value = ["/api/v1/chat/room"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun findAllRoom(): List<ChatRoom> {
+    fun findAllRoom(): List<ChatRoomDto>? {
         return chatRoomService.findAllRoom();
     }
 
