@@ -1,5 +1,6 @@
 package com.chatandpay.ws.chat.entity
 
+import com.chatandpay.ws.chat.dto.GroupChatMesageResponseDto
 import com.chatandpay.ws.utils.toEpochMillis
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
@@ -17,8 +18,19 @@ data class GroupChatMessage(
     val groupId: ObjectId,
     @Field("sender_id")
     val senderId: ObjectId,
+    @Field("sender_name")
+    val senderName: String,
     val message: String
 
 ) {
     val createdAt: Long = LocalDateTime.now().toEpochMillis()
 }
+
+
+fun GroupChatMessage.toDto() = GroupChatMesageResponseDto(
+    id = this.id.toString(),
+    senderId = this.senderId.toString(),
+    senderName = this.senderName,
+    message = this.message,
+    createdAt = this.createdAt
+)

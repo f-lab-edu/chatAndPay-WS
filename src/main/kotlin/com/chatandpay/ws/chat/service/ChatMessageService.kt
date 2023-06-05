@@ -1,9 +1,11 @@
 package com.chatandpay.ws.chat.service
 
 import com.chatandpay.ws.chat.dto.ChatMessageDto
-import com.chatandpay.ws.chat.dto.GroupChatMesageDto
+import com.chatandpay.ws.chat.dto.GroupChatMesageRequestDto
+import com.chatandpay.ws.chat.dto.GroupChatMesageResponseDto
 import com.chatandpay.ws.chat.entity.ChatMessage
 import com.chatandpay.ws.chat.entity.GroupChatMessage
+import com.chatandpay.ws.chat.entity.toDto
 import com.chatandpay.ws.chat.repository.ChatGroupMessageRepository
 import com.chatandpay.ws.chat.repository.ChatMessageRepository
 import org.bson.types.ObjectId
@@ -57,14 +59,15 @@ class ChatMessageService (
     }
 
     // 그룹챗 저장
-    fun createGroupMessage(groupId:ObjectId,groupChatMessageDto: GroupChatMesageDto):GroupChatMessage {
+    fun createGroupMessage(groupId:ObjectId,groupChatMessageDto: GroupChatMesageRequestDto):GroupChatMesageResponseDto {
         try {
             val groupChatMessage = GroupChatMessage(
                 groupId = groupId,
                 senderId = groupChatMessageDto.senderId,
+                senderName = groupChatMessageDto.senderName,
                 message = groupChatMessageDto.message
             );
-            return chatGroupMessageRepository.save(groupChatMessage);
+            return chatGroupMessageRepository.save(groupChatMessage).toDto()
         } catch (e: Exception) { e.printStackTrace()
             throw ChatRoomService.ChatRoomCreationException("Failed to create chat room", e)
         }

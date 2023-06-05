@@ -1,15 +1,13 @@
 package com.chatandpay.ws.chat.controller
 
 import com.chatandpay.ws.chat.dto.ChatRoomDto
-import com.chatandpay.ws.chat.dto.CreateGroupRoomRequestDto
+import com.chatandpay.ws.chat.dto.CreateGroupRoomDto
 import com.chatandpay.ws.chat.dto.CreateRoomRequest
 import com.chatandpay.ws.chat.entity.ChatRoom
-import com.chatandpay.ws.chat.entity.GroupUser
 import com.chatandpay.ws.chat.service.ChatGroupService
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import com.chatandpay.ws.chat.service.ChatRoomService
-import org.bson.types.ObjectId
 import java.util.UUID
 
 
@@ -34,7 +32,7 @@ class ChatRoomRestController(
         value = ["/api/v1/chat/room/type/group"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun createGroupRoom(@RequestBody groupChatRoomDto: CreateGroupRoomRequestDto): ChatRoomDto {
+    fun createGroupRoom(@RequestBody groupChatRoomDto: CreateGroupRoomDto): ChatRoomDto {
         println(groupChatRoomDto);
         return chatRoomService.createGroupMember(groupChatRoomDto);
     }

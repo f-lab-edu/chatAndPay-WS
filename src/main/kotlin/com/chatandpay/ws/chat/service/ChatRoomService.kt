@@ -1,7 +1,7 @@
 package com.chatandpay.ws.chat.service
 
 import com.chatandpay.ws.chat.dto.ChatRoomDto
-import com.chatandpay.ws.chat.dto.CreateGroupRoomRequestDto
+import com.chatandpay.ws.chat.dto.CreateGroupRoomDto
 import com.chatandpay.ws.chat.dto.CreateRoomRequest
 import org.springframework.stereotype.Service
 import com.chatandpay.ws.chat.entity.ChatRoom
@@ -45,7 +45,7 @@ class ChatRoomService(
     }
 
     // 그룹 유저 저장
-    fun createGroupMember(groupChatRoomDto: CreateGroupRoomRequestDto): ChatRoomDto{
+    fun createGroupMember(groupChatRoomDto: CreateGroupRoomDto): ChatRoomDto{
 
         try {
             // 🔴 이부분은 어떻게 처리 되어야 하는지? 트랜잭션으로 처리해야할지?

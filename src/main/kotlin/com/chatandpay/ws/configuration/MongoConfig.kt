@@ -44,6 +44,7 @@ class MongoConfig : AbstractMongoClientConfiguration() {
         val connectionString = ConnectionString(uri)
         val mongoClientSettings = MongoClientSettings
             .builder()
+            .uuidRepresentation(UuidRepresentation.UNSPECIFIED)
             .applyConnectionString(connectionString)
             .build()
 

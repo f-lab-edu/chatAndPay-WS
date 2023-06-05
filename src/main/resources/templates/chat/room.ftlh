@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <title>Websocket Chat</title>
     <meta charset="utf-8">
@@ -41,7 +41,7 @@
     </div>
     <ul class="list-group">
         <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.id"
-            v-on:click="enterRoom(item.id)">
+            v-on:click="enterRoom(item.id,item.type)">
             {{item.name}}
         </li>
     </ul>
@@ -104,12 +104,13 @@
                         });
                 }
             },
-            enterRoom: function (roomId) {
+            enterRoom: function (roomId,type) {
                 var sender = prompt('대화명을 입력해 주세요.');
                 if (sender && sender.trim() !== '') { // 대화명이 입력되었는지 확인
                     localStorage.setItem('wschat.sender', sender);
                     localStorage.setItem('wschat.roomId', roomId);
-                    location.href = "/chat/room/" + roomId;
+                    localStorage.setItem('wschat.type', type);
+                    location.href = "/chat/room/" + roomId + "?type=" + type;
                 }
             }
         }

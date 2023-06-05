@@ -1,7 +1,8 @@
 package com.chatandpay.ws.chat.controller
 
 import com.chatandpay.ws.chat.dto.ChatMessageDto
-import com.chatandpay.ws.chat.dto.GroupChatMesageDto
+import com.chatandpay.ws.chat.dto.GroupChatMesageRequestDto
+import com.chatandpay.ws.chat.dto.GroupChatMesageResponseDto
 import com.chatandpay.ws.chat.entity.GroupChatMessage
 import com.chatandpay.ws.chat.entity.GroupUser
 import com.chatandpay.ws.chat.service.ChatMessageService
@@ -42,9 +43,13 @@ class ChatMessageRestController(
 
     // 그룹 메시지
     @MessageMapping("/pub/chat/room/{roomId}/type/group")
-    @SendTo("/sub/chat/group/{groupId}")
-    fun groupMessage(@DestinationVariable groupId: ObjectId, groupChatMessage:GroupChatMesageDto): GroupChatMessage {
-        return chatMessageService.createGroupMessage(groupId,groupChatMessage);
+    @SendTo("/sub/chat/room/{roomId}/type/group")
+    fun groupMessage(@DestinationVariable roomId: ObjectId, groupChatMessage:GroupChatMesageRequestDto):List<GroupChatMesageRequestDto> {
+        // 사용자가 접속할때마다 채팅 내역을 보여준다
+
+        println("그룹채팅 접속")
+        chatMessageService.createGroupMessage(roomId,groupChatMessage);
+        return listOf(groupChatMessage)
     }
 
 }
