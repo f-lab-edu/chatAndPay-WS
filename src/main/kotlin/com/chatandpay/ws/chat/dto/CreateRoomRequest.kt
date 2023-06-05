@@ -5,14 +5,11 @@ import org.springframework.validation.annotation.Validated
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
-//data class ChatRoomDto(
-//    val id: UUID
-//)
-//
-//
-//internal fun ChatRoom.toDto() = ChatRoomDto(
-//    id = id
-//)
+data class ChatRoomDto(
+    val id: String,
+    val name: String,
+    val type: ChatRoom.Type
+)
 
 
 @Validated

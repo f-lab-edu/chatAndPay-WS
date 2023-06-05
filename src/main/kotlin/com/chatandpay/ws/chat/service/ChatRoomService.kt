@@ -1,10 +1,12 @@
 package com.chatandpay.ws.chat.service
 
+import com.chatandpay.ws.chat.dto.ChatRoomDto
 import com.chatandpay.ws.chat.dto.CreateGroupRoomRequestDto
 import com.chatandpay.ws.chat.dto.CreateRoomRequest
 import org.springframework.stereotype.Service
 import com.chatandpay.ws.chat.entity.ChatRoom
 import com.chatandpay.ws.chat.entity.GroupUser
+import com.chatandpay.ws.chat.entity.toDto
 import com.chatandpay.ws.chat.repository.ChatRoomRepository
 import com.chatandpay.ws.chat.repository.GroupUserRepository
 import org.springframework.http.HttpStatus
@@ -20,11 +22,9 @@ class ChatRoomService(
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     class ChatRoomCreationException(message: String, cause: Throwable) : RuntimeException(message, cause)
 
-    fun findAllRoom(): List<ChatRoom> {
-        val re = chatRoomRepository.findAll();
-        println(re);
-        return re;
-
+    fun findAllRoom(): List<ChatRoomDto>? {
+        val chatRoom = chatRoomRepository.findAll();
+        return chatRoom?.map { it.toDto() }
     }
     fun findById(id: UUID): ChatRoom? {
         val optionalChatRoom: Optional<ChatRoom> = chatRoomRepository.findById(id)
@@ -45,7 +45,7 @@ class ChatRoomService(
     }
 
     // 그룹 유저 저장
-    fun createGroupMember(groupChatRoomDto: CreateGroupRoomRequestDto): ChatRoom{
+    fun createGroupMember(groupChatRoomDto: CreateGroupRoomRequestDto): ChatRoomDto{
 
         try {
             // 🔴 이부분은 어떻게 처리 되어야 하는지? 트랜잭션으로 처리해야할지?
@@ -60,10 +60,14 @@ class ChatRoomService(
             val groupUsers = groupChatRoomDto.members.map{userId ->
                 GroupUser(groupId = chatRoom.id, userId = userId);
             }
-            println(groupUsers);
+
             groupUserRepository.saveAll(groupUsers);
 
-            return chatRoom;
+            return ChatRoomDto(
+                id = chatRoom.id.toString(),
+                name = chatRoom.name,
+                type = chatRoom.type
+            )
 
         } catch (e: Exception) { e.printStackTrace()
             throw ChatRoomService.ChatRoomCreationException("Failed to save group users", e)
