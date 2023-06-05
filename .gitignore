@@ -41,4 +41,4 @@ gradle.properties
 logs
 mongo-data
 mysql-data
-/src/main/resources/application.yml
+*.yml
