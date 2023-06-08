@@ -27,24 +27,24 @@ class MongoConfig : AbstractMongoClientConfiguration() {
         return "chatAndPay"
     }
 
-    override fun customConversions(): MongoCustomConversions {
-        return MongoCustomConversions(
-            listOf(ObjectIdToUUIDConverter())
-        )
-    }
-
-    class ObjectIdToUUIDConverter : Converter<ObjectId, UUID> {
-        override fun convert(source: ObjectId): UUID {
-            return UUID.fromString(source.toString())
-        }
-    }
+//    override fun customConversions(): MongoCustomConversions {
+//        return MongoCustomConversions(
+//            listOf(ObjectIdToUUIDConverter())
+//        )
+//    }
+//
+//    class ObjectIdToUUIDConverter : Converter<ObjectId, UUID> {
+//        override fun convert(source: ObjectId): UUID {
+//            return UUID.fromString(source.toString())
+//        }
+//    }
 
     override fun mongoClient(): MongoClient {
 
         val connectionString = ConnectionString(uri)
         val mongoClientSettings = MongoClientSettings
             .builder()
-            .uuidRepresentation(UuidRepresentation.STANDARD)
+            .uuidRepresentation(UuidRepresentation.UNSPECIFIED)
             .applyConnectionString(connectionString)
             .build()
 

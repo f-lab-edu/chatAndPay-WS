@@ -38,10 +38,11 @@ dependencies {
 	implementation("org.webjars.bower:axios:0.17.1")
 	implementation("org.webjars:sockjs-client:1.1.2")
 	implementation("org.webjars:stomp-websocket:2.3.3-1")
-
-	implementation("com.fasterxml.uuid:java-uuid-generator:3.2.0")
+//
+//	implementation("com.fasterxml.uuid:java-uuid-generator:3.2.0")
 
 	implementation("org.springframework.boot:spring-boot-devtools:2.6.3")
+	implementation("javax.validation:validation-api:2.0.1.Final")
 
 
 }

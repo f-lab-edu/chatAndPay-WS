@@ -1,22 +1,23 @@
-package com.chatandpay.ws.chat.dtos
+package com.chatandpay.ws.chat.dto
+
 
 import com.chatandpay.ws.utils.toEpochMillis
+import org.bson.types.ObjectId
+import org.springframework.validation.annotation.Validated
 import java.time.LocalDateTime
-import java.util.UUID
-
-
-data class ChatMessageDto(
+data class ChatMessageDto (
     val type: Type,
     val senderName: String,
-    val senderId: UUID = UUID.randomUUID(),
-    val recieverId: UUID = UUID.randomUUID(),
+    val senderId: ObjectId = ObjectId(),
+    val recieverId: ObjectId = ObjectId(),
     val recieverName: String?, // 애도 비어있으면 안되지만 일단은..
-    val message: String,
-    val createdAt: Long
+    val message: String
 ) {
+    val createdAt: Long = LocalDateTime.now().toEpochMillis()
     enum class Type {
         ENTER, COMMENT
     }
+
 }
 
 

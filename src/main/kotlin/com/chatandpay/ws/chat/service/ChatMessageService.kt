@@ -1,17 +1,20 @@
 package com.chatandpay.ws.chat.service
 
-import com.chatandpay.ws.chat.dtos.ChatMessageDto
-import com.chatandpay.ws.chat.entity.ChatGroupMessage
+import com.chatandpay.ws.chat.dto.ChatMessageDto
+import com.chatandpay.ws.chat.dto.GroupChatMesageRequestDto
+import com.chatandpay.ws.chat.dto.GroupChatMesageResponseDto
 import com.chatandpay.ws.chat.entity.ChatMessage
-import com.chatandpay.ws.chat.entity.ChatRoom
+import com.chatandpay.ws.chat.entity.GroupChatMessage
+import com.chatandpay.ws.chat.entity.toDto
 import com.chatandpay.ws.chat.repository.ChatGroupMessageRepository
 import com.chatandpay.ws.chat.repository.ChatMessageRepository
+import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class ChatMessageService (
-    private val chatMessageRepository: ChatMessageRepository
+    private val chatMessageRepository: ChatMessageRepository,
     private val chatGroupMessageRepository:ChatGroupMessageRepository
     ){
 
@@ -19,11 +22,9 @@ class ChatMessageService (
         println(chatMessageDto);
         if(chatMessageDto.type == ChatMessageDto.Type.COMMENT){
             val chatMessage = ChatMessage(
-
                 message = chatMessageDto.message,
                 senderId = chatMessageDto.senderId,
-                receiverId = chatMessageDto.recieverId,
-                createdAt = chatMessageDto.createdAt
+                receiverId = chatMessageDto.recieverId
             )
             chatMessageRepository.save(chatMessage);
         }
@@ -32,7 +33,7 @@ class ChatMessageService (
     fun getChatMessagesBySenderId(chatMessageDto: ChatMessageDto):List<ChatMessageDto> {
 
         // 채팅방의 모든 채팅 기록 조회
-        val allChatMessages = chatMessageRepository.findAllBySenderIdOrderByCreatedAtAsc(UUID.randomUUID());
+        val allChatMessages = chatMessageRepository.findAllBySenderIdOrderByCreatedAtAsc(UUID.randomUUID())
         // 나중에 현재 유저의 아이디 값으로 변경할 것
 
         println(allChatMessages);
@@ -58,13 +59,18 @@ class ChatMessageService (
     }
 
     // 그룹챗 저장
-    fun createGroupMessage(name: String) {
-//        try {
-//            val chatRoom = ChatGroupMessage();
-//            return chatGroupMessageRepository.save()
-//        } catch (e: Exception) { e.printStackTrace()
-//            throw ChatRoomService.ChatRoomCreationException("Failed to create chat room", e)
-//        }
+    fun createGroupMessage(groupId:ObjectId,groupChatMessageDto: GroupChatMesageRequestDto):GroupChatMesageResponseDto {
+        try {
+            val groupChatMessage = GroupChatMessage(
+                groupId = groupId,
+                senderId = groupChatMessageDto.senderId,
+                senderName = groupChatMessageDto.senderName,
+                message = groupChatMessageDto.message
+            );
+            return chatGroupMessageRepository.save(groupChatMessage).toDto()
+        } catch (e: Exception) { e.printStackTrace()
+            throw ChatRoomService.ChatRoomCreationException("Failed to create chat room", e)
+        }
     }
 
 }
