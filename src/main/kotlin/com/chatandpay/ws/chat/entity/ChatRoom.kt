@@ -1,6 +1,8 @@
 package com.chatandpay.ws.chat.entity
 
 
+import com.chatandpay.ws.utils.toEpochMillis
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity(name = "ChatRoom")
@@ -18,7 +20,7 @@ data class ChatRoom(
     var type: Type,
 
     @Column(name = "createdAt", nullable = false)
-    var createdAt: Long = System.currentTimeMillis()
+    var createdAt: Long = LocalDateTime.now().toEpochMillis()
 ) {
     enum class Type {
         GROUP, PRIVATE

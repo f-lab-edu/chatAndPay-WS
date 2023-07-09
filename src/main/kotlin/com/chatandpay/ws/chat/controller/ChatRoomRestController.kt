@@ -43,7 +43,7 @@ class ChatRoomRestController(
         value = ["/api/v1/chat/room"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun findAllRoom(queryDTO: ChatRoomQueryDTO): List<ChatRoom> {
+    fun findAllRoom(queryDTO: ChatRoomQueryDto): List<ChatRoom> {
         val sortProperty = queryDTO.sort.split(",")[0]
         val sortDirection = Sort.Direction.fromString(queryDTO.sort.split(",")[1])
         val pageable: Pageable = PageRequest.of(queryDTO.page, queryDTO.size, Sort.by(sortDirection, sortProperty))

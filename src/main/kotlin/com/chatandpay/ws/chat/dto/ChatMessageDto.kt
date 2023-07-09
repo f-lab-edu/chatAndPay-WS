@@ -1,29 +1,24 @@
 package com.chatandpay.ws.chat.dto
 
 
+import com.chatandpay.ws.utils.toEpochMillis
 import java.time.LocalDateTime
 import java.util.UUID
 
 data class ChatMessageDto(
     val type: Type,
     val senderName: String,
-    val senderId: UUID = UUID.randomUUID(),
-    val receiverId:  UUID = UUID.randomUUID(),
-    val receiverName: String? = null,
+    val senderId: Long,
+    val receiverId:  Long,
+    val receiverName: String?,
     val message: String,
-    val createdAt: Long = LocalDateTime.now().toEpochMilli()
+    val createdAt: Long = LocalDateTime.now().toEpochMillis()
 ) {
     enum class Type {
         ENTER, COMMENT
     }
 }
 
-
-data class EnterMessageDto(
-    val senderName:String,
-    val recieverName:String,
-    val message:String="입장했습니다"
-)
 
 
 
