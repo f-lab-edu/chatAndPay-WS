@@ -41,4 +41,7 @@ gradle.properties
 logs
 mongo-data
 mysql-data
+
+
+# .gitignore 파일 내용
 *.yml

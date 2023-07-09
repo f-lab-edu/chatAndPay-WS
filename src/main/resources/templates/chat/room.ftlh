@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <title>Websocket Chat</title>
     <meta charset="utf-8">
@@ -27,7 +27,7 @@
             <select class="form-control" v-model="room_type">
                 <option value="">선택하세요</option>
                 <option value="GROUP">그룹 채팅</option>
-                <option value="ONE_TO_ONE">일반 채팅</option>
+                <option value="PRIVATE">일반 채팅</option>
             </select>
         </div>
     <div class="input-group">
@@ -41,7 +41,7 @@
     </div>
     <ul class="list-group">
         <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.id"
-            v-on:click="enterRoom(item.id)">
+            v-on:click="enterRoom(item.id,item.type)">
             {{item.name}}
         </li>
     </ul>
@@ -87,8 +87,8 @@
 
                     if (this.room_type === 'GROUP') {
                       url = '/api/v1/chat/room/type/group'; // GROUP일 경우 다른 API 호출
-                      let members = ['647c33f22d1fc974ebf36c8a', '647c33f22d1fc974ebf36c8b', '647c33f22d1fc974ebf36c8c']; // ObjectId 리스트를 생성
-                      data.members = members;
+                      let members = [1,Math.floor(Math.random() * 100),Math.floor(Math.random() * 100)]; //본인 포함 멤버 아이디
+                      data.chatUserIds = members;
                     }
 
                     axios.post(url, data)
@@ -104,12 +104,13 @@
                         });
                 }
             },
-            enterRoom: function (roomId) {
+            enterRoom: function (roomId,type) {
                 var sender = prompt('대화명을 입력해 주세요.');
                 if (sender && sender.trim() !== '') { // 대화명이 입력되었는지 확인
                     localStorage.setItem('wschat.sender', sender);
                     localStorage.setItem('wschat.roomId', roomId);
-                    location.href = "/chat/room/" + roomId;
+                    localStorage.setItem('wschat.type', type);
+                    location.href = "/chat/room/" + roomId + "?type=" + type;
                 }
             }
         }
