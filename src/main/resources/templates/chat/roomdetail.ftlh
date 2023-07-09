@@ -51,6 +51,7 @@
         el: '#app',
         data: {
             roomId: '',
+            type: '',
             room: {},
             senderName: '',
             message: '',
@@ -58,6 +59,7 @@
         },
         created() {
             this.roomId = localStorage.getItem('wschat.roomId');
+            this.type = localStorage.getItem('wschat.type');
             this.senderName = localStorage.getItem('wschat.sender');
             this.findRoom();
         },
@@ -68,23 +70,33 @@
                 });
             },
             sendMessage: function () {
-                ws.send("/pub/chat/room/" + this.roomId, {}, JSON.stringify({
-                    type: 'COMMENT',
-                    senderName: this.senderName,
-                    message: this.message
-                }));
+
+                if(this.type === "GROUP"){
+                    ws.send("/pub/chat/room/" + this.roomId + "/type/group", {}, JSON.stringify({
+                        type: 'COMMENT',
+                        senderName: this.senderName,
+                        message: this.message
+                    }));
+                }else{
+                    ws.send("/pub/chat/room/" + this.roomId , {}, JSON.stringify({
+                        type: 'COMMENT',
+                        senderName: this.senderName,
+                        message: this.message
+                    }));
+                }
+
                 this.message = '';
             },
             recvMessage: function (recvList) {
                 //if (recv.type === 'COMMENT') {
                 recvList.map(recv => {
-
                     this.messages.unshift({
                         "type": recv.type,
                         "senderName": recv.senderName,
                         "message": recv.message,
                         "createdAt": recv.createdAt
                     })
+                    console.log(this.messages);
 
                 })
                 //}
@@ -95,16 +107,17 @@
     function connect() {
         // pub/sub event
         ws.connect({}, function (frame) {
+        console.log(frame);
             ws.subscribe("/sub/chat/room/" + vm.$data.roomId, function (message) {
                 var recv = JSON.parse(message.body);
                 console.log(recv);
                 vm.recvMessage(recv);
             });
 
-            ws.subscribe("/sub/chat/room/type/group/" + vm.$data.roomId, function (message) {
+            ws.subscribe("/sub/chat/room/" + vm.$data.roomId + "/type/group", function (message) {
                 var recv = JSON.parse(message.body);
                 console.log(recv);
-            // 처리 로직 추가
+                vm.recvMessage(recv);
             });
 
 
@@ -113,6 +126,7 @@
                 senderName: vm.$data.senderName,
                 message: ''
             }));
+
         }, function (error) {
             if (reconnect++ <= 5) {
                 setTimeout(function () {
