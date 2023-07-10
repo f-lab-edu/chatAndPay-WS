@@ -2,7 +2,6 @@ package com.chatandpay.ws.chat.entity
 
 import com.chatandpay.ws.chat.dto.GroupChatMessageDto
 import com.chatandpay.ws.utils.toEpochMillis
-import org.springframework.data.annotation.Id
 import java.time.LocalDateTime
 import javax.persistence.*
 

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 import com.chatandpay.ws.chat.entity.ChatRoom
 import com.chatandpay.ws.chat.entity.UserChatRoom
 import com.chatandpay.ws.chat.repository.ChatRoomRepository
+import com.chatandpay.ws.chat.repository.UserChatRoomInBulkRepository
 import com.chatandpay.ws.chat.repository.UserChatRoomRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
@@ -16,7 +17,8 @@ import javax.transaction.Transactional
 @Service
 class ChatRoomService(
     private val chatRoomRepository: ChatRoomRepository,
-    private val userChatRoomRepository: UserChatRoomRepository
+    private val userChatRoomRepository: UserChatRoomRepository,
+    private val userChatRoomInBulkRepository: UserChatRoomInBulkRepository
 ) {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -41,7 +43,7 @@ class ChatRoomService(
             )
             return chatRoomRepository.save(chatRoom)
         } catch (e: Exception) { e.printStackTrace()
-            throw ChatRoomCreationException("Failed to create chat room : ", e)
+            throw ChatRoomCreationException("Failed to create private chat room : ", e)
         }
     }
 
@@ -61,7 +63,7 @@ class ChatRoomService(
                 UserChatRoom.create(chatRoomId = chatRoom.id, chatUserId = userId);
             }
 
-            userChatRoomRepository.saveAll(groupUsers);
+            userChatRoomInBulkRepository.saveAll(groupUsers);
 
             return chatRoom;
 

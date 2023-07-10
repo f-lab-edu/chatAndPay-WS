@@ -14,8 +14,8 @@ class GroupChatController(
 ) {
 
     // 그룹 메시지
-    @MessageMapping("/pub/chat/room/{roomId}/type/group")
-    @SendTo("/sub/chat/room/{roomId}/type/group")
+    @MessageMapping("/pub/chat/room/{chatRoomId}/type/group")
+    @SendTo("/sub/chat/room/{chatRoomId}/type/group")
     fun groupMessage(@DestinationVariable chatRoomId: Long,groupChatMessage: GroupChatMessageDto):List<GroupChatMessage> {
         println("그룹채팅 접속")
         return chatMessageService.saveGroupMessage(chatRoomId,groupChatMessage);
