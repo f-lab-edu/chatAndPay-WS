@@ -1,8 +1,19 @@
 package com.chatandpay.ws.chat.repository
 
 import com.chatandpay.ws.chat.entity.ChatRoom
-import org.springframework.data.mongodb.repository.MongoRepository
-import java.util.UUID
+import com.chatandpay.ws.chat.entity.UserChatRoom
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.jdbc.core.BatchPreparedStatementSetter
+import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.stereotype.Repository
+import java.sql.PreparedStatement
+import java.sql.SQLException
 
-interface ChatRoomRepository : MongoRepository<ChatRoom, UUID> {
+
+interface ChatRoomRepository : JpaRepository<ChatRoom, Long> {
 }
+
+
+
+
+

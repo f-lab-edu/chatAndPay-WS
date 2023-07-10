@@ -1,29 +1,30 @@
 package com.chatandpay.ws.chat.controller
 
-import com.chatandpay.ws.chat.dto.ChatRoomDto
-import com.chatandpay.ws.chat.dto.CreateGroupRoomDto
-import com.chatandpay.ws.chat.dto.CreateRoomRequest
+import com.chatandpay.ws.chat.dto.*
 import com.chatandpay.ws.chat.entity.ChatRoom
-import com.chatandpay.ws.chat.service.ChatGroupService
+
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import com.chatandpay.ws.chat.service.ChatRoomService
-import java.util.UUID
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 
 
 @RestController
 class ChatRoomRestController(
     private val chatRoomService: ChatRoomService,
-    private val chatGroupService: ChatGroupService
+//    private val chatGroupService: ChatGroupService
 ) {
 
-    // 체팅방 생성 - 채팅방의 타입 구분
+    // 1:1 채팅방 생성
     @PostMapping(
         value = ["/api/v1/chat/room"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun createRoom(@RequestBody chatRoomDto: CreateRoomRequest): ChatRoom {
-        return chatRoomService.createRoom(chatRoomDto);
+        println(chatRoomDto);
+        return chatRoomService.createPrivateChatRoom(chatRoomDto);
     }
 
 
@@ -32,9 +33,8 @@ class ChatRoomRestController(
         value = ["/api/v1/chat/room/type/group"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun createGroupRoom(@RequestBody groupChatRoomDto: CreateGroupRoomDto): ChatRoomDto {
-        println(groupChatRoomDto);
-        return chatRoomService.createGroupMember(groupChatRoomDto);
+    fun createGroupRoom(@RequestBody groupChatRoomDto: CreateGroupChatRoomDto): ChatRoom {
+        return chatRoomService.createGroupChatRoom(groupChatRoomDto);
     }
 
 
@@ -43,8 +43,11 @@ class ChatRoomRestController(
         value = ["/api/v1/chat/room"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun findAllRoom(): List<ChatRoomDto>? {
-        return chatRoomService.findAllRoom();
+    fun findAllRoom(queryDTO: ChatRoomQueryDto): List<ChatRoom> {
+        val sortProperty = queryDTO.sort.split(",")[0]
+        val sortDirection = Sort.Direction.fromString(queryDTO.sort.split(",")[1])
+        val pageable: Pageable = PageRequest.of(queryDTO.page, queryDTO.size, Sort.by(sortDirection, sortProperty))
+        return chatRoomService.findAllRoom(pageable)
     }
 
     // 채팅방 조회
@@ -53,7 +56,7 @@ class ChatRoomRestController(
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun roomInfo(
-        @PathVariable roomId: UUID
+        @PathVariable roomId: Long
     ): ChatRoom? {
         return chatRoomService.findById(roomId)
     }

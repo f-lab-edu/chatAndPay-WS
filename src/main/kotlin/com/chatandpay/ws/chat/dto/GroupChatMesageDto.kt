@@ -1,12 +1,11 @@
 package com.chatandpay.ws.chat.dto
 
 import com.chatandpay.ws.utils.toEpochMillis
-import org.bson.types.ObjectId
 import java.time.LocalDateTime
 
-data class GroupChatMesageRequestDto(
+data class GroupChatMessageDto(
     val type: Type,
-    val senderId: ObjectId = ObjectId(), // 유저가 생기면 바궈야함
+    val senderId: Long, // 유저가 생기면 바궈야함
     val senderName: String,
     val message: String
 ){
@@ -17,10 +16,10 @@ data class GroupChatMesageRequestDto(
 }
 
 
-data class GroupChatMesageResponseDto(
-    val id: String?,
-    val senderId: String,
-    val senderName: String,
-    val message: String,
-    val createdAt: Long
-)
+//data class GroupChatMesageResponseDto(
+//    val id: String?,
+//    val senderId: String,
+//    val senderName: String,
+//    val message: String,
+//    val createdAt: Long
+//)
