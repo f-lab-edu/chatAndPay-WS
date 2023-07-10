@@ -107,6 +107,7 @@
     function connect() {
         // pub/sub event
         ws.connect({}, function (frame) {
+        console.log(frame);
             ws.subscribe("/sub/chat/room/" + vm.$data.roomId, function (message) {
                 var recv = JSON.parse(message.body);
                 console.log(recv);

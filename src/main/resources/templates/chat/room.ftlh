@@ -27,7 +27,7 @@
             <select class="form-control" v-model="room_type">
                 <option value="">선택하세요</option>
                 <option value="GROUP">그룹 채팅</option>
-                <option value="ONE_TO_ONE">일반 채팅</option>
+                <option value="PRIVATE">일반 채팅</option>
             </select>
         </div>
     <div class="input-group">
@@ -87,8 +87,8 @@
 
                     if (this.room_type === 'GROUP') {
                       url = '/api/v1/chat/room/type/group'; // GROUP일 경우 다른 API 호출
-                      let members = ['647c33f22d1fc974ebf36c8a', '647c33f22d1fc974ebf36c8b', '647c33f22d1fc974ebf36c8c']; // ObjectId 리스트를 생성
-                      data.members = members;
+                      let members = [1,Math.floor(Math.random() * 100),Math.floor(Math.random() * 100)]; //본인 포함 멤버 아이디
+                      data.chatUserIds = members;
                     }
 
                     axios.post(url, data)

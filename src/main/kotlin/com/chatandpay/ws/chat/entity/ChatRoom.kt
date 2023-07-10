@@ -1,31 +1,40 @@
 package com.chatandpay.ws.chat.entity
 
-import com.chatandpay.ws.chat.dto.ChatRoomDto
-import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document;
-import java.util.UUID
 
+import com.chatandpay.ws.utils.toEpochMillis
+import java.time.LocalDateTime
+import javax.persistence.*
 
-@Document("chatRoom")
+@Entity(name = "ChatRoom")
 data class ChatRoom(
     @Id
-    val id: ObjectId = ObjectId(),
-    val name: String,
-    val type: Type
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    var id: Long? = null,
+
+    @Column(name = "name", nullable = false)
+    var name: String,
+
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    var type: Type,
+
+    @Column(name = "createdAt", nullable = false)
+    var createdAt: Long = LocalDateTime.now().toEpochMillis()
 ) {
     enum class Type {
-        GROUP, ONE_TO_ONE
+        GROUP, PRIVATE
+    }
+
+    companion object {
+        @JvmStatic
+        fun create(name: String, type: Type): ChatRoom {
+            return ChatRoom(name = name, type = type)
+        }
     }
 
 }
 
-// ChatRoom 확장 함수
-fun ChatRoom.toDto() = ChatRoomDto(
-    id = this.id.toString(),
-    name = this.name,
-    type = this.type
-)
 
 
 

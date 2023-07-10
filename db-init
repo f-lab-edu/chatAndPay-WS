@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# 로그 함수 정의
+log() {
+  echo "[INFO] $1"
+}
+
+# 에러 함수 정의
+err() {
+  echo "[ERROR] $1"
+  exit 1
+}
+
+log "docker-compose 실행 시작"
+docker-compose up -d
+if [ $? -ne 0 ]; then
+    err "docker-compose 실행 중 오류가 발생했습니다. 도커 데몬이 활성화 되어있는지 확인하세요."
+fi
+
+sleep 3
+
+log "PostgreSQL 컨테이너에서 psql 실행하여 확장 기능 추가"
+docker exec -it postgres psql -U chat -d chat -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
+if [ $? -ne 0 ]; then
+    err "확장 기능 추가 중 오류가 발생했습니다."
+fi
+
