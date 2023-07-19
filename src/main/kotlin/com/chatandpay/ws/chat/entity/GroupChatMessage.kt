@@ -1,36 +1,42 @@
 package com.chatandpay.ws.chat.entity
 
-import com.chatandpay.ws.chat.dto.GroupChatMesageResponseDto
+import com.chatandpay.ws.chat.dto.GroupChatMessageDto
 import com.chatandpay.ws.utils.toEpochMillis
-import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.core.mapping.Field
 import java.time.LocalDateTime
-import java.util.*
+import javax.persistence.*
 
 
-@Document(collection = "groupMessage")
+@Entity
 data class GroupChatMessage(
     @Id
-    val id: ObjectId = ObjectId(),
-    @Field("group_id")
-    val groupId: ObjectId,
-    @Field("sender_id")
-    val senderId: ObjectId,
-    @Field("sender_name")
-    val senderName: String,
-    val message: String
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
 
+    var chatRoomId: Long,
+
+    var senderId: Long,
+
+    var senderName: String,
+
+    var message: String,
+
+    var createdAt: Long = LocalDateTime.now().toEpochMillis()
 ) {
-    val createdAt: Long = LocalDateTime.now().toEpochMillis()
+
+    companion object {
+        @JvmStatic
+        fun create(chatRoomId: Long, groupChatMessageDto: GroupChatMessageDto): GroupChatMessage {
+            return GroupChatMessage(
+                chatRoomId = chatRoomId,
+                message = groupChatMessageDto.message,
+                senderId = groupChatMessageDto.senderId,
+                senderName = groupChatMessageDto.senderName
+            )
+        }
+    }
+
+
+
+
 }
-
-
-fun GroupChatMessage.toDto() = GroupChatMesageResponseDto(
-    id = this.id.toString(),
-    senderId = this.senderId.toString(),
-    senderName = this.senderName,
-    message = this.message,
-    createdAt = this.createdAt
-)
